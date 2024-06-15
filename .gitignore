@@ -1,0 +1,5 @@
+/venv
+test.py
+mails.sqlite
+/__pycache__
+variables.py
