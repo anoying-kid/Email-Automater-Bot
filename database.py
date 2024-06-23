@@ -9,7 +9,8 @@ class UserData(Base):
     UserId = Column(String, nullable=False)
     Name = Column(String, nullable=False)
     Email = Column(String, nullable=False)
-    Template = Column(String, nullable=False)
+    Subject = Column(String, nullable=False)
+    Body = Column(String, nullable=False)
 
 class Database:
     def __init__(self) -> None:
@@ -17,14 +18,15 @@ class Database:
         self.Session = sessionmaker(bind=self.engine)
         Base.metadata.create_all(self.engine)
 
-    def save_new_email(self, id: str, name: str, email: str, template: str):
+    def save_new_email(self, id: str, name: str, email: str, subject: str, body: str):
         session = self.Session()
         try:
             new_email_data = UserData(
                 UserId=id,
                 Name=name,
                 Email=email,
-                Template=template
+                Subject=subject,
+                Body=body
             )
             session.add(new_email_data)
             session.commit()
