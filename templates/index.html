@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SQLite Database Table</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Users</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>UserId</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Body</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user['id'] }}</td>
+            <td>{{ user['UserId'] }}</td>
+            <td>{{ user['Email'] }}</td>
+            <td>{{ user['Subject'] }}</td>
+            <td>{{ user['Body'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
