@@ -1,12 +1,11 @@
 import smtplib
 from email.mime.text import MIMEText
-from variables import APPPASSWORD
 from database import Database
 
 class Mail:
-    def __init__(self, sender):
+    def __init__(self, sender, password):
         self.sender = sender
-        self.password = APPPASSWORD
+        self.password = password
 
     def __send_email(self, subject, body, recipients):
         msg = MIMEText(body)
@@ -38,5 +37,5 @@ if __name__ == "__main__":
         sender = "yugrana854@gmail.com"
         recipients = ["yugrana853@gmail.com"]
 
-        mail = Mail(sender)
-        mail.send_email(subject, body, recipients)
+        # mail = Mail(sender)
+        # mail.send_email(subject, body, recipients)

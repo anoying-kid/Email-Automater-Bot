@@ -18,6 +18,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 NAME, EMAIL, SUBJECT, BODY = range(4)
+USER_EMAIL, USER_PASSWORD = range(2)
 
 class Bot:
     def __init__(self, token):
@@ -37,7 +38,14 @@ class Bot:
             },
             fallbacks=[]
         )
-        sent_handler = CommandHandler('send', self.send)
+        sent_handler = ConversationHandler(
+            entry_points=[CommandHandler('send', self.send)],
+            states={
+                USER_EMAIL: [MessageHandler(filters.TEXT & ~filters.COMMAND, self.get_user_email)],
+                USER_PASSWORD: [MessageHandler(filters.TEXT & ~filters.COMMAND, self.get_user_password)],
+            },
+            fallbacks=[]
+        )
 
         self.application.add_handler(start_handler)
         self.application.add_handler(add_email_handler)
@@ -85,10 +93,22 @@ class Bot:
         return ConversationHandler.END
     
     async def send(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Enter your Email ✉️: ")
+        return USER_EMAIL
+
+    async def get_user_email(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        context.user_data['user_email'] = update.message.text
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Enter your AppPassword")
+        return USER_PASSWORD
+    
+    async def get_user_password(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = update.effective_chat.id
-        mail = Mail(sender='yugrana854@gmail.com')
+        user_password = update.message.text
+        user_email = context.user_data['user_email']
+        mail = Mail(sender=user_email, password=user_password)
         mail.send_email_from(user_id=user_id)
-        await context.bot.send_message(chat_id=user_id, text="All the mails has been sent!✉️")
+        await context.bot.send_message(chat_id=user_id, text="All the mail has been sent! ✉️")
+        return ConversationHandler.END
 
     def run(self):
         self.application.run_polling()

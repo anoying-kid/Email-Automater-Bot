@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Column, String, Integer
+from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 Base = declarative_base()
